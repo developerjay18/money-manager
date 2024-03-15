@@ -43,7 +43,7 @@ function Navbar() {
 
             <MenubarMenu>
               <MenubarTrigger>Contact Us</MenubarTrigger>
-              <MenubarContent>
+              <MenubarContent className="font-poppins">
                 <Link to={'/feedback'}>
                   <MenubarItem>Feedback</MenubarItem>
                 </Link>
@@ -55,6 +55,12 @@ function Navbar() {
                   <MenubarItem>Whatsapp Us</MenubarItem>
                 </Link>
               </MenubarContent>
+            </MenubarMenu>
+
+            <MenubarMenu>
+              <Link to={'/logout'}>
+                <MenubarTrigger>Logout</MenubarTrigger>
+              </Link>
             </MenubarMenu>
           </Menubar>
         </div>

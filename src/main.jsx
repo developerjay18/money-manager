@@ -8,12 +8,15 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import { Home } from './pages/index.js';
+import { Category, Expense, Feedback, Home } from './pages/index.js';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path={'/'} element={<App />}>
       <Route path="/" element={<Home />} />
+      <Route path="/expenses" element={<Expense />} />
+      <Route path="/category" element={<Category />} />
+      <Route path="/feedback" element={<Feedback />} />
     </Route>
   )
 );
