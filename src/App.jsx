@@ -1,9 +1,14 @@
+import { Outlet } from 'react-router-dom';
 import './App.css';
+import { Navbar } from './components';
 
 function App() {
   return (
     <>
-      <h1>Welcome to Money Manager</h1>
+      <Navbar />
+      <main>
+        <Outlet/>
+      </main>
     </>
   );
 }
