@@ -8,7 +8,7 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import { Category, Expense, Feedback, Home } from './pages/index.js';
+import { Auths, Category, Expense, Feedback, Home } from './pages/index.js';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +17,7 @@ const router = createBrowserRouter(
       <Route path="/expenses" element={<Expense />} />
       <Route path="/category" element={<Category />} />
       <Route path="/feedback" element={<Feedback />} />
+      <Route path="/auth" element={<Auths />} />
     </Route>
   )
 );
