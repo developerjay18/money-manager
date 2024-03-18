@@ -14,7 +14,7 @@ export class CategoryService {
   }
 
   // TO ADD CATEGORY
-  async addCategory({ name }) {
+  async addCategory(name) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,

@@ -1,15 +1,47 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import authservice from '@/appwrite/auth';
+import { useDispatch } from 'react-redux';
+import { login } from '@/store/authSlice';
+import { useNavigate } from 'react-router-dom';
+import categoryService from '@/appwrite/category.config';
+import { addCategories } from '@/store/categorySlice';
 
 function Home() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await authservice.getCurrentAccount();
+        if (userData) {
+          dispatch(login(userData));
+          console.log('USER LOGGED IN SUCCESSFULLY');
+        }
+
+        // const categoriesData = await categoryService.getAllCategory();
+        // if (categoriesData) {
+        //   dispatch(addCategories(categoriesData));
+        //   console.log('CATEGORIES FETCHED AND STORED SUCCESSFULLY');
+        // }
+
+      } catch (error) {
+        console.log('USER IS NOT LOGGED IN', error);
+        navigate('/auth');
+      }
+    };
+
+    fetchUser();
+  }, [dispatch, navigate]);
+
   return (
     <div className="px-[4rem] pt-10 py-[1rem]">
       <div className="flex justify-center lg:gap-x-10 flex-wrap gap-y-4 lg:gap-y-10 flex-col lg:flex-row font-poppins">

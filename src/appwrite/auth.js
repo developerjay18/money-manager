@@ -13,37 +13,6 @@ export class Authservice {
     this.account = new Account(this.client);
   }
 
-  // TO REGISTER USER
-  async createAccount({ name, email, password }) {
-    try {
-      const user = await this.account.create(
-        ID.unique(),
-        email,
-        password,
-        name
-      );
-
-      if (user) {
-        console.log('ACCOUNT (USER) CREATED');
-        return this.login({ email, password });
-      } else {
-        console.log('ACCOUNT (USER) NOT CREATED');
-        return user;
-      }
-    } catch (error) {
-      throw console.log('ERROR ON CREATING ACCOUNT (USER)', error);
-    }
-  }
-
-  // TO LOGIN USER
-  async loginAccount({ email, password }) {
-    try {
-      return this.account.createEmailPasswordSession(email, password);
-    } catch (error) {
-      throw console.log('ERROR ON LOGIN ACCOUNT (USER)', error);
-    }
-  }
-
   // GET CURRENT USER
   async getCurrentAccount() {
     try {
@@ -59,6 +28,18 @@ export class Authservice {
       return this.account.deleteSessions();
     } catch (error) {
       throw console.log('ERROR ON DELETING ACCOUNT (USER)', error);
+    }
+  }
+
+  async loginWithGoogle() {
+    try {
+      return this.account.createOAuth2Session(
+        'google',
+        'http://localhost:5173',
+        'http://localhost:5173/auth'
+      );
+    } catch (error) {
+      console.log('ERROR WHILE DOING GOOGLE AUTH', error);
     }
   }
 }

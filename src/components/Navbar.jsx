@@ -8,7 +8,10 @@ import {
   MenubarTrigger,
 } from '@/components/ui/menubar';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import authservice from '@/appwrite/auth';
+import { useDispatch } from 'react-redux';
+import { logout } from '@/store/authSlice';
 
 const message =
   'Hello, I came from your webiste and I want Website for my Business.';
@@ -16,6 +19,14 @@ const whatsappUrl =
   'https://wa.me/' + '+916351468706' + '?text=' + encodeURIComponent(message);
 
 function Navbar() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    dispatch(logout());
+    await authservice.logoutAccount();
+    navigate('/auth');
+  };
+
   return (
     <nav>
       <div className="grid grid-flow-col px-[4rem] py-[1rem] grid-cols-2 items-center font-poppins">
@@ -58,9 +69,7 @@ function Navbar() {
             </MenubarMenu>
 
             <MenubarMenu>
-              <Link to={'/logout'}>
-                <MenubarTrigger>Logout</MenubarTrigger>
-              </Link>
+              <MenubarTrigger onClick={handleLogout}>Logout</MenubarTrigger>
             </MenubarMenu>
           </Menubar>
         </div>
