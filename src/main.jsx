@@ -17,31 +17,10 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path={'/'} element={<App />}>
       <Route path="/" element={<Home />} />
-      <Route
-        path="/expenses"
-        element={
-          <AuthLayout authentication>
-            <Expense />
-          </AuthLayout>
-        }
-      />
+      <Route path="/expenses" element={<Expense />} />
       <Route path="/category" element={<Category />} />
-      <Route
-        path="/feedback"
-        element={
-          <AuthLayout authentication>
-            <Feedback />
-          </AuthLayout>
-        }
-      />
-      <Route
-        path="/auth"
-        element={
-          <AuthLayout authentication={false}>
-            <Auths />
-          </AuthLayout>
-        }
-      />
+      <Route path="/feedback" element={<Feedback />} />
+      <Route path="/auth" element={<Auths />} />
     </Route>
   )
 );
