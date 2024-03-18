@@ -109,7 +109,7 @@ function Expense() {
   };
 
   return (
-    <div className="px-[4rem] pt-10 py-[1rem] font-poppins">
+    <div className="lg:px-[4rem] px-5 pt-10 py-[1rem] font-poppins">
       {/* add expense section  */}
       <Card>
         <CardHeader>
@@ -120,7 +120,7 @@ function Expense() {
         </CardHeader>
         <form action="" method="post" onSubmit={handleSubmit}>
           <CardContent>
-            <div className="grid grid-cols-3 gap-[3rem]">
+            <div className="grid lg:grid-cols-3 gap-5 lg:gap-[3rem]">
               <div className="">
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -173,7 +173,10 @@ function Expense() {
                   </select>
                 )}
 
-                <Button type="submit" className="flex items-center gap-1">
+                <Button
+                  type="submit"
+                  className="flex items-center gap-1 mt-3 lg:mt-0"
+                >
                   Add
                 </Button>
               </div>
@@ -190,9 +193,9 @@ function Expense() {
           <div className="mt-10 flex flex-col gap-3">
             {allExpenses.map((item, index) => (
               <Card className="flex items-center pt-6" key={index}>
-                <CardContent className="flex w-full items-center justify-between">
-                  <div className="flex items-center gap-8 w-full">
-                    <div className="w-[30%]">{item.name}</div>
+                <CardContent className="flex w-full items-center justify-between flex-col lg:flex-row gap-5 lg:gap-0">
+                  <div className="flex items-center justify-between lg:justify-start gap-8 w-full">
+                    <div className="lg:w-[30%]">{item.name}</div>
                     <div className="flex items-center gap-1">
                       {' '}
                       <span>&#8377;</span>

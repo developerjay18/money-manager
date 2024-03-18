@@ -8,8 +8,10 @@ function Auths() {
   };
 
   return (
-    <div className="px-[4rem] pt-10 py-[1rem] flex flex-col justify-center font-poppins">
-    <h1 className='text-7xl font-semibold text-center py-20 leading-[5.3rem]'>Get your Free Account <br /> and Track your Expense</h1>
+    <div className="lg:px-[4rem] px-5 pt-10 py-[1rem] flex flex-col justify-center font-poppins">
+      <h1 className="lg:text-7xl text-5xl font-semibold text-center pt-24 pb-20 lg:leading-[5.3rem] leading-[3.5rem]">
+        Get your Free Account and Track your Expense
+      </h1>
       <button
         onClick={loginWithGoogleAuth}
         className="bg-red-500 px-5 py-3 rounded-lg capitalize text-lg flex gap-3 hover:bg-red-700 mx-auto lg:w-[20%]"

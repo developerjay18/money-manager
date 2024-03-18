@@ -12,15 +12,46 @@ import { Link, useNavigate } from 'react-router-dom';
 import authservice from '@/appwrite/auth';
 import { useDispatch } from 'react-redux';
 import { logout } from '@/store/authSlice';
+import { Menu, X } from 'lucide-react';
 
 const message =
   'Hello, I came from your webiste and I want Website for my Business.';
 const whatsappUrl =
   'https://wa.me/' + '+916351468706' + '?text=' + encodeURIComponent(message);
 
+const menuItems = [
+  {
+    name: 'Home',
+    href: '/',
+  },
+  {
+    name: 'Expenses',
+    href: '/expenses',
+  },
+  {
+    name: 'Category',
+    href: '/category',
+  },
+  {
+    name: 'Feedback',
+    href: '/feedback',
+  },
+  {
+    name: 'Whatsapp Us',
+    href: `${whatsappUrl}`,
+  },
+];
+
 function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   const handleLogout = async () => {
     dispatch(logout());
     await authservice.logoutAccount();
@@ -29,8 +60,10 @@ function Navbar() {
 
   return (
     <nav>
-      <div className="grid grid-flow-col px-[4rem] py-[1rem] grid-cols-2 items-center font-poppins">
-        <div className="font-bold text-xl">MONEY MANAGER</div>
+      <div className="grid-flow-col px-[4rem] py-[1rem] grid-cols-2 items-center font-poppins hidden lg:grid">
+        <Link to={'/'}>
+          <div className="font-bold text-xl">MONEY MANAGER</div>
+        </Link>
         <div className="">
           {' '}
           <Menubar>
@@ -72,6 +105,71 @@ function Navbar() {
               <MenubarTrigger onClick={handleLogout}>Logout</MenubarTrigger>
             </MenubarMenu>
           </Menubar>
+        </div>
+      </div>
+
+      <div className="relative font-poppins w-full pt-4 bg-transparent lg:hidden">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
+          <div className="inline-flex items-center space-x-2">
+            <Link to={'/'}>
+              <h1 className="font-bold text-lg">MONEY MANAGER</h1>
+            </Link>
+          </div>
+          <div className="lg:hidden">
+            <Menu onClick={toggleMenu} className="h-6 w-6 cursor-pointer" />
+          </div>
+          {isMenuOpen && (
+            <div className="absolute inset-x-0 top-0 z-50 origin-top-right transform p-2 transition lg:hidden">
+              <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className="px-5 pb-6 pt-5">
+                  <div className="flex items-center justify-between">
+                    <div className="inline-flex items-center space-x-2">
+                      <Link to={'/'}>
+                        <h1 className="font-extrabold text-lg text-black">
+                          MONEY MANAGER
+                        </h1>
+                      </Link>
+                    </div>
+                    <div className="-mr-2">
+                      <button
+                        type="button"
+                        onClick={toggleMenu}
+                        className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                      >
+                        <span className="sr-only">Close menu</span>
+                        <X className="h-6 w-6" aria-hidden="true" />
+                      </button>
+                    </div>
+                  </div>
+                  <div className="mt-6">
+                    <nav className="grid gap-y-4">
+                      {menuItems.map((item) => (
+                        <a
+                          key={item.name}
+                          href={item.href}
+                          className="-m-3 flex items-center rounded-md p-3 text-sm font-semibold hover:bg-gray-50"
+                        >
+                          <span className="ml-3 text-base font-medium text-gray-900">
+                            {item.name}
+                          </span>
+                        </a>
+                      ))}
+                    </nav>
+                  </div>
+                  <button
+                    type="button"
+                    className="mt-4 w-full rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                    onClick={() => {
+                      handleLogout();
+                      toggleMenu();
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </nav>

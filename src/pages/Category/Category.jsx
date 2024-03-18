@@ -49,7 +49,7 @@ function Category() {
     };
 
     fetchUser();
-  }, [dispatch, navigate, categoryName, allCategories,userId]);
+  }, [dispatch, navigate, categoryName, allCategories, userId]);
   // all categories are refreshing themselves continously
 
   const handleSubmit = async (e) => {
@@ -73,7 +73,7 @@ function Category() {
   };
 
   return (
-    <div className="px-[4rem] pt-10 py-[1rem] font-poppins">
+    <div className="lg:px-[4rem] px-5 pt-10 py-[1rem] font-poppins">
       {/* add category section  */}
       <Card>
         <CardHeader>
@@ -84,7 +84,7 @@ function Category() {
         </CardHeader>
         <form action="#" method="post" onSubmit={handleSubmit}>
           <CardContent>
-            <div className="grid grid-cols-3 gap-[3rem]">
+            <div className="grid lg:grid-cols-3 lg:gap-[3rem]">
               <div className="">
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -98,7 +98,7 @@ function Category() {
                 />
               </div>
 
-              <div className="flex flex-col gap-2 justify-end">
+              <div className="flex flex-col gap-2 justify-end mt-3 lg:mt-0">
                 <Button type="submit" className="flex items-center gap-1">
                   Add
                 </Button>

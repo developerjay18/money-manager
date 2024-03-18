@@ -42,8 +42,8 @@ function Home() {
   }, [dispatch, navigate]);
 
   return (
-    <div className="px-[4rem] pt-10 py-[1rem]">
-      <div className="font-poppins text-7xl capitalize text-center pt-10 pb-20 font-semibold">
+    <div className="lg:px-[4rem] px-5 pt-10 py-[1rem]">
+      <div className="font-poppins text-4xl lg:text-7xl capitalize text-center pt-10 pb-10 lg:pb-20 font-semibold leading-[3rem]">
         Welcome to Money Manager
       </div>
 
@@ -65,7 +65,7 @@ function Home() {
           </CardContent>
         </Card>
 
-        <Card className="w-[30%]">
+        <Card className="lg:w-[30%]">
           <CardHeader>
             <CardTitle>Most Expensive Category</CardTitle>
             <CardDescription>
@@ -82,7 +82,7 @@ function Home() {
           </CardContent>
         </Card>
 
-        <Card className="w-[30%]">
+        <Card className="lg:w-[30%]">
           <CardHeader>
             <CardTitle>Today's Expenses</CardTitle>
             <CardDescription>
