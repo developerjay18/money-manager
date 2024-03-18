@@ -26,7 +26,7 @@ export class CategoryService {
       throw console.log('ERROR ON ADDING CATEGORY', error);
     }
   }
-
+  
   // TO DELETE CATEGORY
   async deleteCategory(id) {
     try {

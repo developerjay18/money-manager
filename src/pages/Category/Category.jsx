@@ -49,7 +49,7 @@ function Category() {
     };
 
     fetchUser();
-  }, [dispatch, navigate, categoryName, allCategories]);
+  }, [dispatch, navigate, categoryName, allCategories,userId]);
   // all categories are refreshing themselves continously
 
   const handleSubmit = async (e) => {

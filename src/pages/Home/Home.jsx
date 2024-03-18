@@ -32,7 +32,6 @@ function Home() {
         //   dispatch(addCategories(categoriesData));
         //   console.log('CATEGORIES FETCHED AND STORED SUCCESSFULLY');
         // }
-
       } catch (error) {
         console.log('USER IS NOT LOGGED IN', error);
         navigate('/auth');
@@ -44,6 +43,10 @@ function Home() {
 
   return (
     <div className="px-[4rem] pt-10 py-[1rem]">
+      <div className="font-poppins text-7xl capitalize text-center pt-10 pb-20 font-semibold">
+        Welcome to Money Manager
+      </div>
+
       <div className="flex justify-center lg:gap-x-10 flex-wrap gap-y-4 lg:gap-y-10 flex-col lg:flex-row font-poppins">
         <Card className="lg:w-[30%]">
           <CardHeader>
@@ -64,16 +67,16 @@ function Home() {
 
         <Card className="w-[30%]">
           <CardHeader>
-            <CardTitle>Total categories</CardTitle>
+            <CardTitle>Most Expensive Category</CardTitle>
             <CardDescription>
-              Categories created by you till now from 15-03-2024
+              This Category Cosumes highest expenses in your list
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Button className="flex items-center gap-1 text-xl">
               <span>&#8377;</span>
               <span>
-                <p className="text-lg">40000</p>
+                <p className="text-lg">140000</p>
               </span>
             </Button>
           </CardContent>
@@ -91,23 +94,6 @@ function Home() {
               <span>&#8377;</span>
               <span>
                 <p className="text-lg">40000</p>
-              </span>
-            </Button>
-          </CardContent>
-        </Card>
-
-        <Card className="w-[30%]">
-          <CardHeader>
-            <CardTitle>Most Expensive Category</CardTitle>
-            <CardDescription>
-              This Category Cosumes highest expenses
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button className="flex items-center gap-1 text-xl">
-              <span>&#8377;</span>
-              <span>
-                <p className="text-lg">140000</p>
               </span>
             </Button>
           </CardContent>
