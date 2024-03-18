@@ -24,31 +24,39 @@ function Expense() {
   });
   const [allExpenses, setallExpenses] = useState({});
   const [length, setLength] = useState(0);
+  const [userId, setUserId] = useState('');
   const [allCategories, setAllCategories] = useState({});
   const [catLength, setCatLength] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = () => {
+    const fetchUser = async () => {
       try {
-        const userData = authservice.getCurrentAccount();
+        const userData = await authservice.getCurrentAccount();
         if (userData) {
           dispatch(login(userData));
+          setUserId(userData.$id);
           console.log('USER LOGGED IN SUCCESSFULLY');
         }
 
-        categoryService.getAllCategory([]).then((cats) => {
+        await categoryService.getAllCategory([]).then((cats) => {
           if (cats) {
-            setAllCategories(cats.documents);
-            setCatLength(cats.total);
+            const filteredCategories = cats.documents.filter(
+              (category) => category.userId === userId
+            );
+            setAllCategories(filteredCategories);
+            setCatLength(filteredCategories.length);
           }
         });
 
-        expenseService.getAllExpenses([]).then((expense) => {
+        await expenseService.getAllExpenses([]).then((expense) => {
           if (expense) {
-            setallExpenses(expense.documents);
-            setLength(expense.total);
+            const filteredExpenses = expense.documents.filter(
+              (exp) => exp.userId === userId
+            );
+            setallExpenses(filteredExpenses);
+            setLength(filteredExpenses.length);
           }
         });
       } catch (error) {
@@ -58,7 +66,7 @@ function Expense() {
     };
 
     fetchUser();
-  }, [dispatch, navigate, allExpenses]);
+  }, [dispatch, navigate, allExpenses, userId]);
   // all categories are refreshing themselves continously
 
   const handleChange = (e) => {
@@ -74,10 +82,11 @@ function Expense() {
     e.preventDefault();
 
     try {
-      const exp = await expenseService.addExpense(
+      await expenseService.addExpense(
         expense.category,
         expense.name,
-        expense.amount
+        expense.amount,
+        userId
       );
       console.log('EXPENSE ADDED SUCCESSFULLY');
       setExpense({

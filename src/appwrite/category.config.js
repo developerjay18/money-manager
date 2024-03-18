@@ -14,13 +14,13 @@ export class CategoryService {
   }
 
   // TO ADD CATEGORY
-  async addCategory(name) {
+  async addCategory(name, userId) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCategoryCollectionId,
         ID.unique(),
-        { name }
+        { name, userId }
       );
     } catch (error) {
       throw console.log('ERROR ON ADDING CATEGORY', error);

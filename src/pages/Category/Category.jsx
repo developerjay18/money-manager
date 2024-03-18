@@ -17,24 +17,29 @@ import { useNavigate } from 'react-router-dom';
 
 function Category() {
   const [categoryName, setCategoryName] = useState('');
+  const [userId, setUserId] = useState('');
   const [allCategories, setAllCategories] = useState({});
   const [length, setLength] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = () => {
+    const fetchUser = async () => {
       try {
-        const userData = authservice.getCurrentAccount();
+        const userData = await authservice.getCurrentAccount();
         if (userData) {
           dispatch(login(userData));
+          setUserId(userData.$id);
           console.log('USER LOGGED IN SUCCESSFULLY');
         }
 
-        categoryService.getAllCategory([]).then((cats) => {
+        await categoryService.getAllCategory([]).then((cats) => {
           if (cats) {
-            setAllCategories(cats.documents);
-            setLength(cats.total);
+            const filteredCategories = cats.documents.filter(
+              (category) => category.userId === userId
+            );
+            setAllCategories(filteredCategories);
+            setLength(filteredCategories.length);
           }
         });
       } catch (error) {
@@ -50,7 +55,7 @@ function Category() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await categoryService.addCategory(categoryName);
+      await categoryService.addCategory(categoryName, userId);
       setCategoryName('');
       console.log('CATEGORY ADDED SUCCESSFULLY');
     } catch (error) {

@@ -11,7 +11,7 @@ function Auths() {
     <div className="px-[4rem] pt-10 py-[1rem] flex justify-center font-poppins">
       <button
         onClick={loginWithGoogleAuth}
-        className="bg-red-500 px-5 py-3 rounded-lg capitalize text-lg flex gap-3"
+        className="bg-red-500 px-5 py-3 rounded-lg capitalize text-lg flex gap-3 hover:bg-red-700"
       >
         <span>Login with google</span>
         <span>
