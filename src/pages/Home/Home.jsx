@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   CardContent,
@@ -11,12 +11,14 @@ import authservice from '@/appwrite/auth';
 import { useDispatch } from 'react-redux';
 import { login } from '@/store/authSlice';
 import { useNavigate } from 'react-router-dom';
-import categoryService from '@/appwrite/category.config';
-import { addCategories } from '@/store/categorySlice';
+import expenseService from '@/appwrite/expense.config';
 
 function Home() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [userId, setUserId] = useState('');
+  const [sum, setSum] = useState(0);
+  const [todaysSum, setTodaysSum] = useState(0);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -24,14 +26,34 @@ function Home() {
         const userData = await authservice.getCurrentAccount();
         if (userData) {
           dispatch(login(userData));
+          setUserId(userData.$id);
           console.log('USER LOGGED IN SUCCESSFULLY');
         }
 
-        // const categoriesData = await categoryService.getAllCategory();
-        // if (categoriesData) {
-        //   dispatch(addCategories(categoriesData));
-        //   console.log('CATEGORIES FETCHED AND STORED SUCCESSFULLY');
-        // }
+        await expenseService.getAllExpenses([]).then((expense) => {
+          let localSum = 0;
+          let localTodaysSum = 0;
+          if (expense) {
+            const filteredExpense = expense.documents.filter(
+              (expense) => expense.userId === userId
+            );
+
+            let date = new Date();
+
+            filteredExpense.map((exp) => {
+              localSum += Number(exp.amount);
+
+              let expenseDate = exp.$createdAt.slice(0, 10);
+              let currentDate = date.toISOString().slice(0, 10);
+              if (expenseDate === currentDate) {
+                localTodaysSum += Number(exp.amount);
+              }
+            });
+
+            setSum(localSum);
+            setTodaysSum(localTodaysSum);
+          }
+        });
       } catch (error) {
         console.log('USER IS NOT LOGGED IN', error);
         navigate('/auth');
@@ -39,7 +61,7 @@ function Home() {
     };
 
     fetchUser();
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, userId]);
 
   return (
     <div className="lg:px-[4rem] px-5 pt-10 py-[1rem]">
@@ -59,7 +81,7 @@ function Home() {
             <Button className="flex items-center gap-1 text-xl">
               <span>&#8377;</span>
               <span>
-                <p className="text-lg">40000</p>
+                <p className="text-lg">{sum}</p>
               </span>
             </Button>
           </CardContent>
@@ -93,7 +115,7 @@ function Home() {
             <Button className="flex items-center gap-1 text-xl">
               <span>&#8377;</span>
               <span>
-                <p className="text-lg">40000</p>
+                <p className="text-lg">{todaysSum}</p>
               </span>
             </Button>
           </CardContent>
