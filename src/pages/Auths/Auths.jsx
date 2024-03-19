@@ -2,9 +2,10 @@ import React from 'react';
 import authservice from '@/appwrite/auth';
 
 function Auths() {
-  const loginWithGoogleAuth = async (e) => {
-    e.preventDefault();
+  const loginWithGoogleAuth = async () => {
+    console.log('Entering into main func');
     await authservice.loginWithGoogle();
+    console.log('Exiting into main func');
   };
 
   return (
