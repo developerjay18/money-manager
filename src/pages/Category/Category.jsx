@@ -53,6 +53,7 @@ function Category() {
             setLength(filteredCategories.length);
             const groupedData = groupCategoryByDate(filteredCategories);
             setAllGroupedCategories(groupedData);
+            console.log("data setted");
           }
         });
       } catch (error) {
@@ -62,7 +63,7 @@ function Category() {
     };
 
     fetchUser();
-  }, [dispatch, navigate, categoryName, userId]);
+  }, [dispatch, navigate, categoryName, userId, allGroupedCategories]);
   // also add allGroupedcategories
   // all categories are refreshing themselves continously
 
