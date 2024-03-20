@@ -61,7 +61,7 @@ function Navbar() {
   return (
     <nav>
       <div className="grid-flow-col px-[4rem] py-[1rem] grid-cols-2 items-center font-poppins hidden lg:grid">
-        <Link to={'/'}>
+        <Link to={'/'} className="hover:text-[#fd366e] ease-in-out">
           <div className="font-bold text-xl">MONEY MANAGER</div>
         </Link>
         <div className="">
@@ -111,7 +111,7 @@ function Navbar() {
       <div className="relative font-poppins w-full pt-4 bg-transparent lg:hidden">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
           <div className="inline-flex items-center space-x-2">
-            <Link to={'/'}>
+            <Link to={'/'} className="hover:text-[#fd366e]">
               <h1 className="font-bold text-lg">MONEY MANAGER</h1>
             </Link>
           </div>
@@ -124,8 +124,8 @@ function Navbar() {
                 <div className="px-5 pb-6 pt-5">
                   <div className="flex items-center justify-between">
                     <div className="inline-flex items-center space-x-2">
-                      <Link to={'/'}>
-                        <h1 className="font-extrabold text-lg text-black">
+                      <Link to={'/'} onClick={toggleMenu}>
+                        <h1 className="font-extrabold text-lg text-black hover:text-[#fd366e]">
                           MONEY MANAGER
                         </h1>
                       </Link>
@@ -144,21 +144,21 @@ function Navbar() {
                   <div className="mt-6">
                     <nav className="grid gap-y-4">
                       {menuItems.map((item) => (
-                        <a
+                        <Link
                           key={item.name}
-                          href={item.href}
+                          to={item.href}
                           className="-m-3 flex items-center rounded-md p-3 text-sm font-semibold hover:bg-gray-50"
                         >
-                          <span className="ml-3 text-base font-medium text-gray-900">
+                          <span className="ml-3 text-base font-medium hover:text-[#fd366e] text-gray-900">
                             {item.name}
                           </span>
-                        </a>
+                        </Link>
                       ))}
                     </nav>
                   </div>
                   <button
                     type="button"
-                    className="mt-4 w-full rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                    className="mt-4 w-full rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black hover:bg-[#fd366e] hover:text-white"
                     onClick={() => {
                       handleLogout();
                       toggleMenu();

@@ -80,7 +80,7 @@ function Home() {
           </CardHeader>
           <CardContent>
             {sum ? (
-              <Button className="flex min-h-[5vh] items-center gap-1 text-xl">
+              <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
                 <span>&#8377;</span>
                 <span>
                   <p className="text-lg">{sum ? sum : 'loading...'}</p>
@@ -103,7 +103,7 @@ function Home() {
           </CardHeader>
           <CardContent>
             {expCat ? (
-              <Button className="flex min-h-[5vh] items-center gap-1 text-xl">
+              <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
                 <span>&#8377;</span>
                 <span>
                   <p className="text-lg">140000</p>
@@ -126,7 +126,7 @@ function Home() {
           </CardHeader>
           <CardContent>
             {todaysSum ? (
-              <Button className="flex min-h-[5vh] items-center gap-1 text-xl">
+              <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
                 <span>&#8377;</span>
                 <span>
                   <p className="text-lg">

@@ -16,13 +16,25 @@ import { useNavigate } from 'react-router-dom';
 import expenseService from '@/appwrite/expense.config';
 import categoryService from '@/appwrite/category.config';
 
+const groupExpenseByDate = (expenses) => {
+  return expenses.reduce((groupedExpenses, expense) => {
+    const date = expense.$createdAt.slice(0, 10);
+    if (!groupedExpenses[date]) {
+      groupedExpenses[date] = [];
+    }
+
+    groupedExpenses[date].push(expense);
+    return groupedExpenses;
+  }, {});
+};
+
 function Expense() {
   const [expense, setExpense] = useState({
     name: '',
     amount: '',
     category: '',
   });
-  const [allExpenses, setallExpenses] = useState({});
+  const [allGroupedExpenses, setAllGroupedExpenses] = useState({});
   const [length, setLength] = useState(0);
   const [userId, setUserId] = useState('');
   const [allCategories, setAllCategories] = useState({});
@@ -55,8 +67,9 @@ function Expense() {
             const filteredExpenses = expense.documents.filter(
               (exp) => exp.userId === userId
             );
-            setallExpenses(filteredExpenses);
             setLength(filteredExpenses.length);
+            const groupedData = groupExpenseByDate(filteredExpenses);
+            setAllGroupedExpenses(groupedData);
           }
         });
       } catch (error) {
@@ -66,7 +79,7 @@ function Expense() {
     };
 
     fetchUser();
-  }, [dispatch, navigate, allExpenses, userId]);
+  }, [dispatch, navigate, userId, allGroupedExpenses]);
   // all categories are refreshing themselves continously
 
   const handleChange = (e) => {
@@ -179,7 +192,7 @@ function Expense() {
 
                 <Button
                   type="submit"
-                  className="flex items-center gap-1 mt-3 lg:mt-0"
+                  className="flex items-center gap-1 mt-3 lg:mt-0 hover:bg-[#fd366e] hover:text-white"
                 >
                   Add
                 </Button>
@@ -194,38 +207,49 @@ function Expense() {
         <div className="mt-10">
           <h2 className="text-xl font-semibold">All Expenses ({length})</h2>
 
-          <div className="mt-10 flex flex-col gap-3">
-            {allExpenses.map((item, index) => (
-              <Card className="flex items-center pt-6" key={index}>
-                <CardContent className="flex w-full items-center justify-between flex-col lg:flex-row gap-5 lg:gap-0">
-                  <div className="flex items-center justify-between lg:justify-start gap-8 w-full">
-                    <div className="lg:w-[30%]">{item.name}</div>
-                    <div className="flex items-center gap-1">
-                      {' '}
-                      <span>&#8377;</span>
-                      <span>{item.amount}</span>
-                    </div>
-                  </div>
+          <div className="mt-10 flex flex-col gap-y-6">
+            {Object.keys(allGroupedExpenses).map((date) => (
+              <div className="flex flex-col gap-y-4" key={date}>
+                <div className="flex gap-x-3 items-center">
+                  <i className="fa-solid fa-angles-right"></i>
+                  <h2 className="text-lg font-semibold">Expenses on {date}</h2>
+                </div>
+                <hr />
+                <ul className="flex flex-col gap-y-2">
+                  {allGroupedExpenses[date].map((item) => (
+                    <Card className="flex items-center pt-6" key={item.$id}>
+                      <CardContent className="flex w-full items-center justify-between flex-col lg:flex-row gap-5 lg:gap-0">
+                        <div className="flex items-center justify-between lg:justify-start gap-8 w-full">
+                          <div className="lg:w-[30%]">{item.name}</div>
+                          <div className="flex items-center gap-1">
+                            {' '}
+                            <span>&#8377;</span>
+                            <span>{item.amount}</span>
+                          </div>
+                        </div>
 
-                  <div className="flex items-center gap-8">
-                    <Input
-                      type="text"
-                      id="categorys"
-                      value={item.category?.name}
-                      className="capitalize"
-                      readOnly="true"
-                      clickable="false"
-                    />
+                        <div className="flex items-center gap-8">
+                          <Input
+                            type="text"
+                            id="categorys"
+                            value={item.category?.name}
+                            className="capitalize"
+                            readOnly="true"
+                            clickable="false"
+                          />
 
-                    <Button
-                      className="flex items-center gap-1"
-                      onClick={() => handleDelete(item.$id)}
-                    >
-                      <i className="fa-solid fa-trash"></i>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+                          <Button
+                            className="flex items-center gap-1 hover:bg-[#fd366e] hover:text-white"
+                            onClick={() => handleDelete(item.$id)}
+                          >
+                            <i className="fa-solid fa-trash"></i>
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </ul>
+              </div>
             ))}
           </div>
         </div>

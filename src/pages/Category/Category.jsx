@@ -15,10 +15,22 @@ import { login } from '@/store/authSlice';
 import authservice from '@/appwrite/auth';
 import { useNavigate } from 'react-router-dom';
 
+const groupCategoryByDate = (categories) => {
+  return categories.reduce((groupedCategories, category) => {
+    const date = category.$createdAt.slice(0, 10);
+    if (!groupedCategories[date]) {
+      groupedCategories[date] = [];
+    }
+
+    groupedCategories[date].push(category);
+    return groupedCategories;
+  }, {});
+};
+
 function Category() {
   const [categoryName, setCategoryName] = useState('');
   const [userId, setUserId] = useState('');
-  const [allCategories, setAllCategories] = useState({});
+  const [allGroupedCategories, setAllGroupedCategories] = useState({});
   const [length, setLength] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -38,8 +50,9 @@ function Category() {
             const filteredCategories = cats.documents.filter(
               (category) => category.userId === userId
             );
-            setAllCategories(filteredCategories);
             setLength(filteredCategories.length);
+            const groupedData = groupCategoryByDate(filteredCategories);
+            setAllGroupedCategories(groupedData);
           }
         });
       } catch (error) {
@@ -49,7 +62,8 @@ function Category() {
     };
 
     fetchUser();
-  }, [dispatch, navigate, categoryName, allCategories, userId]);
+  }, [dispatch, navigate, categoryName, userId]);
+  // also add allGroupedcategories
   // all categories are refreshing themselves continously
 
   const handleSubmit = async (e) => {
@@ -99,7 +113,10 @@ function Category() {
               </div>
 
               <div className="flex flex-col gap-2 justify-end mt-3 lg:mt-0">
-                <Button type="submit" className="flex items-center gap-1">
+                <Button
+                  type="submit"
+                  className="flex items-center gap-1 hover:bg-[#fd366e] hover:text-white"
+                >
                   Add
                 </Button>
               </div>
@@ -115,23 +132,36 @@ function Category() {
         <div className="mt-10">
           {length ? (
             <div className="flex flex-col gap-y-3">
-              {allCategories.map((item, index) => (
-                <Card className="flex items-center pt-6" key={index}>
-                  <CardContent className="flex w-full items-center justify-between">
-                    <div className="flex items-center gap-8">
-                      <div>{item.name}</div>
-                    </div>
+              {Object.keys(allGroupedCategories).map((date) => (
+                <div className="flex flex-col gap-y-4" key={date}>
+                  <div className="flex gap-x-3 items-center">
+                    <i className="fa-solid fa-angles-right"></i>
+                    <h2 className="text-lg font-semibold">
+                      Categories on {date}
+                    </h2>
+                  </div>
+                  <hr />
+                  <ul className="flex flex-col gap-y-2">
+                    {allGroupedCategories[date].map((item) => (
+                      <Card className="flex items-center pt-6" key={item.$id}>
+                        <CardContent className="flex w-full items-center justify-between">
+                          <div className="flex items-center gap-8">
+                            <div>{item.name}</div>
+                          </div>
 
-                    <div className="flex items-center gap-8">
-                      <Button
-                        className="flex items-center gap-1"
-                        onClick={() => handleDelete(item.$id)}
-                      >
-                        <i className="fa-solid fa-trash"></i>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                          <div className="flex items-center gap-8">
+                            <Button
+                              className="flex items-center gap-1 hover:bg-[#fd366e] hover:text-white"
+                              onClick={() => handleDelete(item.$id)}
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </ul>
+                </div>
               ))}
             </div>
           ) : (
