@@ -109,6 +109,7 @@ function Category() {
                   className="capitalize"
                   value={categoryName}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
 

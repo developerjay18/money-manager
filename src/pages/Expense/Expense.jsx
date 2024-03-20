@@ -144,6 +144,7 @@ function Expense() {
                   className="capitalize"
                   value={expense.name}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
 
@@ -157,6 +158,7 @@ function Expense() {
                   className="capitalize"
                   value={expense.amount}
                   onChange={handleChange}
+                  required={true}
                 />
               </div>
 
@@ -171,6 +173,7 @@ function Expense() {
                       value={expense.category.$id}
                       onChange={handleChange}
                       className="bg-transparent p-1 border border-slate-700 rounded-md w-full h-full"
+                      // required={true}
                     >
                       <option value="none" className="bg-black rounded-lg">
                         Select category
