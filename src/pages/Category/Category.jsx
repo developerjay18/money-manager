@@ -113,7 +113,7 @@ function Category() {
         <h2 className="text-xl font-semibold">All Categories ({length})</h2>
 
         <div className="mt-10">
-          {length && (
+          {length ? (
             <div className="flex flex-col gap-y-3">
               {allCategories.map((item, index) => (
                 <Card className="flex items-center pt-6" key={index}>
@@ -133,6 +133,10 @@ function Category() {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          ) : (
+            <div className="mt-10 text-center lg:min-h-screen">
+              <div className="loader mx-auto"></div>
             </div>
           )}
         </div>

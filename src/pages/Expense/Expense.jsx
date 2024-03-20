@@ -150,28 +150,32 @@ function Expense() {
               <div className="flex flex-col gap-2">
                 <Label htmlFor="category">Category</Label>
 
-                {catLength && (
-                  <select
-                    name="category"
-                    id="category"
-                    value={expense.category.$id}
-                    onChange={handleChange}
-                    className="bg-transparent p-1 border border-slate-700 rounded-md"
-                  >
-                    <option value="none" className="bg-black rounded-lg">
-                      Select category
-                    </option>
-                    {allCategories.map((item, index) => (
-                      <option
-                        value={item.$id}
-                        className="bg-black rounded-lg"
-                        key={index}
-                      >
-                        {item.name}
+                <div className="min-h-[5vh] lg:min-h-[7vh] w-full ">
+                  {catLength ? (
+                    <select
+                      name="category"
+                      id="category"
+                      value={expense.category.$id}
+                      onChange={handleChange}
+                      className="bg-transparent p-1 border border-slate-700 rounded-md w-full h-full"
+                    >
+                      <option value="none" className="bg-black rounded-lg">
+                        Select category
                       </option>
-                    ))}
-                  </select>
-                )}
+                      {allCategories.map((item, index) => (
+                        <option
+                          value={item.$id}
+                          className="bg-black rounded-lg"
+                          key={index}
+                        >
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <h1>Loading...</h1>
+                  )}
+                </div>
 
                 <Button
                   type="submit"
@@ -186,7 +190,7 @@ function Expense() {
       </Card>
 
       {/* all expenses section  */}
-      {length && (
+      {length ? (
         <div className="mt-10">
           <h2 className="text-xl font-semibold">All Expenses ({length})</h2>
 
@@ -224,6 +228,10 @@ function Expense() {
               </Card>
             ))}
           </div>
+        </div>
+      ) : (
+        <div className="mt-10 text-center lg:min-h-screen">
+          <div className="loader mx-auto"></div>
         </div>
       )}
     </div>

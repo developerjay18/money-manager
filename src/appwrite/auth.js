@@ -40,8 +40,8 @@ export class Authservice {
       // );
       // return this.account.createOAuth2Session(
       //   'google',
-      //   'http://192.168.1.5:5173',
-      //   'http://192.168.1.5:5173/auth'
+      //   'http://192.168.1.4:5173',
+      //   'http://192.168.1.4:5173/auth'
       // );
       return this.account.createOAuth2Session(
         'google',

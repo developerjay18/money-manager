@@ -19,6 +19,7 @@ function Home() {
   const [userId, setUserId] = useState('');
   const [sum, setSum] = useState(0);
   const [todaysSum, setTodaysSum] = useState(0);
+  const [expCat, setExpCat] = useState(0);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -78,12 +79,18 @@ function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="flex items-center gap-1 text-xl">
-              <span>&#8377;</span>
-              <span>
-                <p className="text-lg">{sum}</p>
-              </span>
-            </Button>
+            {sum ? (
+              <Button className="flex min-h-[5vh] items-center gap-1 text-xl">
+                <span>&#8377;</span>
+                <span>
+                  <p className="text-lg">{sum ? sum : 'loading...'}</p>
+                </span>
+              </Button>
+            ) : (
+              <div className="min-h-[5vh]">
+                <div className="loader"></div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -95,12 +102,18 @@ function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="flex items-center gap-1 text-xl">
-              <span>&#8377;</span>
-              <span>
-                <p className="text-lg">140000</p>
-              </span>
-            </Button>
+            {expCat ? (
+              <Button className="flex min-h-[5vh] items-center gap-1 text-xl">
+                <span>&#8377;</span>
+                <span>
+                  <p className="text-lg">140000</p>
+                </span>
+              </Button>
+            ) : (
+              <div className="min-h-[5vh]">
+                <div className="loader"></div>
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -112,12 +125,20 @@ function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button className="flex items-center gap-1 text-xl">
-              <span>&#8377;</span>
-              <span>
-                <p className="text-lg">{todaysSum}</p>
-              </span>
-            </Button>
+            {todaysSum ? (
+              <Button className="flex min-h-[5vh] items-center gap-1 text-xl">
+                <span>&#8377;</span>
+                <span>
+                  <p className="text-lg">
+                    {todaysSum ? todaysSum : 'loading...'}
+                  </p>
+                </span>
+              </Button>
+            ) : (
+              <div className="min-h-[5vh]">
+                <div className="loader"></div>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
