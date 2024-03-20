@@ -45,7 +45,7 @@ export class Authservice {
       // );
       return this.account.createOAuth2Session(
         'google',
-        'https://money-manager-kappa.vercel.app',
+        'https://money-manager-kappa.vercel.app/category',
         'https://money-manager-kappa.vercel.app/auth'
       );
     } catch (error) {

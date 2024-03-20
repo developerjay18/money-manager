@@ -147,6 +147,7 @@ function Navbar() {
                         <Link
                           key={item.name}
                           to={item.href}
+                          onClick={toggleMenu}
                           className="-m-3 flex items-center rounded-md p-3 text-sm font-semibold hover:bg-gray-50"
                         >
                           <span className="ml-3 text-base font-medium hover:text-[#fd366e] text-gray-900">
