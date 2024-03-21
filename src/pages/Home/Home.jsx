@@ -83,7 +83,7 @@ function Home() {
             setIncomeTodaysSum(localTodaysSum);
           }
 
-          setResult(sum - incomeSum);
+          setResult(incomeSum - sum);
         });
       } catch (error) {
         console.log('USER IS NOT LOGGED IN', error);
