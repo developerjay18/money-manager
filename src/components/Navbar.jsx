@@ -29,8 +29,8 @@ const menuItems = [
     href: '/expenses',
   },
   {
-    name: 'Category',
-    href: '/category',
+    name: 'Incomes',
+    href: '/incomes',
   },
   {
     name: 'Feedback',
@@ -80,8 +80,8 @@ function Navbar() {
             </MenubarMenu>
 
             <MenubarMenu>
-              <Link to={'/category'}>
-                <MenubarTrigger>category</MenubarTrigger>
+              <Link to={'/incomes'}>
+                <MenubarTrigger>Incomes</MenubarTrigger>
               </Link>
             </MenubarMenu>
 

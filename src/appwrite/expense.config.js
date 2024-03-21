@@ -14,13 +14,13 @@ export class ExpenseService {
   }
 
   // TO ADD EXPENSE
-  async addExpense(category, name, amount, userId) {
+  async addExpense(name, amount, userId) {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
         conf.appwriteExpenseCollectionId,
         ID.unique(),
-        { category, name, amount, userId }
+        { name, amount, userId }
       );
     } catch (error) {
       throw console.log('ERROR ON ADDING EXPENSE', error);

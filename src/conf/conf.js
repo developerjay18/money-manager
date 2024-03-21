@@ -8,6 +8,9 @@ const conf = {
   appwriteExpenseCollectionId: String(
     import.meta.env.VITE_APPWRITE_EXPENSE_COLLECTION_ID
   ),
+  appwriteIncomeCollectionId: String(
+    import.meta.env.VITE_APPWRITE_INCOME_COLLECTION_ID
+  ),
 };
 
 export default conf;

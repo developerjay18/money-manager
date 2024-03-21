@@ -40,12 +40,12 @@ export class Authservice {
       // );
       // return this.account.createOAuth2Session(
       //   'google',
-      //   'http://192.168.1.4:5173',
-      //   'http://192.168.1.4:5173/auth'
+      //   'http://192.168.1.6:5173',
+      //   'http://192.168.1.6:5173/auth'
       // );
       return this.account.createOAuth2Session(
         'google',
-        'https://money-manager-kappa.vercel.app/category',
+        'https://money-manager-kappa.vercel.app/',
         'https://money-manager-kappa.vercel.app/auth'
       );
     } catch (error) {

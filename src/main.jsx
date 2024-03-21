@@ -8,17 +8,16 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
-import { Auths, Category, Expense, Feedback, Home } from './pages/index.js';
+import { Auths, Expense, Feedback, Home, Income } from './pages/index.js';
 import { Provider } from 'react-redux';
 import store from './store/store.js';
-import { AuthLayout } from './components/index.js';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path={'/'} element={<App />}>
       <Route path="/" element={<Home />} />
       <Route path="/expenses" element={<Expense />} />
-      <Route path="/category" element={<Category />} />
+      <Route path="/incomes" element={<Income />} />
       <Route path="/feedback" element={<Feedback />} />
       <Route path="/auth" element={<Auths />} />
     </Route>
