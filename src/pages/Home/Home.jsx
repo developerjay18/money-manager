@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -25,79 +25,77 @@ function Home() {
   const [result, setResult] = useState(0);
   const [loaderK, setLoaderK] = useState(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        setLoaderK(true);
-        const userData = await authservice.getCurrentAccount();
-        if (userData) {
-          dispatch(login(userData));
-          setUserId(userData.$id);
-          console.log('USER LOGGED IN SUCCESSFULLY');
-        }
-
-        await expenseService.getAllExpenses([]).then((expense) => {
-          let localSum = 0;
-          let localTodaysSum = 0;
-          if (expense) {
-            const filteredExpense = expense.documents.filter(
-              (expense) => expense.userId === userId
-            );
-
-            let date = new Date();
-
-            filteredExpense.map((exp) => {
-              localSum += Number(exp.amount);
-
-              let expenseDate = exp.$createdAt.slice(0, 10);
-              let currentDate = date.toISOString().slice(0, 10);
-              if (expenseDate === currentDate) {
-                localTodaysSum += Number(exp.amount);
-              }
-            });
-
-            setSum(localSum);
-            setTodaysSum(localTodaysSum);
-          }
-        });
-
-        await incomeService.getAllIncomes([]).then((income) => {
-          let localSum = 0;
-          let localTodaysSum = 0;
-          if (income) {
-            const filteredIncome = income.documents.filter(
-              (income) => income.userId === userId
-            );
-
-            let date = new Date();
-
-            filteredIncome.map((exp) => {
-              localSum += Number(exp.amount);
-
-              let expenseDate = exp.$createdAt.slice(0, 10);
-              let currentDate = date.toISOString().slice(0, 10);
-              if (expenseDate === currentDate) {
-                localTodaysSum += Number(exp.amount);
-              }
-            });
-
-            setIncomeSum(localSum);
-            setIncomeTodaysSum(localTodaysSum);
-          }
-
-          setResult(incomeSum - sum);
-          console.log(result);
-        });
-
-        setLoaderK(false);
-      } catch (error) {
-        console.log('USER IS NOT LOGGED IN', error);
-        navigate('/auth');
+  const fetchData = useCallback(async () => {
+    try {
+      setLoaderK(true);
+      const userData = await authservice.getCurrentAccount();
+      if (userData) {
+        dispatch(login(userData));
+        setUserId(userData.$id);
+        console.log('USER LOGGED IN SUCCESSFULLY');
       }
-    };
 
-    fetchUser();
-  }, [dispatch, navigate, userId, sum, incomeSum, result]);
+      const expenseData = await expenseService.getAllExpenses([]);
+      let localSum = 0;
+      let localTodaysSum = 0;
+      if (expenseData) {
+        const filteredExpense = expenseData.documents.filter(
+          (expense) => expense.userId === userId
+        );
+
+        let date = new Date();
+
+        filteredExpense.forEach((exp) => {
+          localSum += Number(exp.amount);
+
+          let expenseDate = exp.$createdAt.slice(0, 10);
+          let currentDate = date.toISOString().slice(0, 10);
+          if (expenseDate === currentDate) {
+            localTodaysSum += Number(exp.amount);
+          }
+        });
+
+        setSum(localSum);
+        setTodaysSum(localTodaysSum);
+      }
+
+      const incomeData = await incomeService.getAllIncomes([]);
+      let localIncomeSum = 0;
+      let localIncomeTodaysSum = 0;
+      if (incomeData) {
+        const filteredIncome = incomeData.documents.filter(
+          (income) => income.userId === userId
+        );
+
+        let date = new Date();
+
+        filteredIncome.forEach((inc) => {
+          localIncomeSum += Number(inc.amount);
+
+          let incomeDate = inc.$createdAt.slice(0, 10);
+          let currentDate = date.toISOString().slice(0, 10);
+          if (incomeDate === currentDate) {
+            localIncomeTodaysSum += Number(inc.amount);
+          }
+        });
+
+        setIncomeSum(localIncomeSum);
+        setIncomeTodaysSum(localIncomeTodaysSum);
+      }
+
+      setResult(localIncomeSum - localSum);
+      console.log(result);
+
+      setLoaderK(false);
+    } catch (error) {
+      console.log('USER IS NOT LOGGED IN', error);
+      navigate('/auth');
+    }
+  }, [dispatch, navigate, userId]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div className="lg:px-[4rem] px-5 pt-10 py-[1rem]">

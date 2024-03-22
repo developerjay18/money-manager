@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Card,
   CardContent,
@@ -28,7 +28,7 @@ const groupExpenseByDate = (expenses) => {
   }, {});
 };
 
-function Expense() {
+const Expense = () => {
   const [expense, setExpense] = useState({
     name: '',
     amount: '',
@@ -36,41 +36,9 @@ function Expense() {
   const [allGroupedExpenses, setAllGroupedExpenses] = useState({});
   const [length, setLength] = useState(0);
   const [userId, setUserId] = useState('');
-  const [loaderK, setloaderK] = useState(false);
+  const [loaderK, setLoaderK] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        setloaderK(true);
-        const userData = await authservice.getCurrentAccount();
-        if (userData) {
-          dispatch(login(userData));
-          setUserId(userData.$id);
-          console.log('USER LOGGED IN SUCCESSFULLY');
-        }
-
-        await expenseService.getAllExpenses([]).then((expense) => {
-          if (expense) {
-            const filteredExpenses = expense.documents.filter(
-              (exp) => exp.userId === userId
-            );
-            setLength(filteredExpenses.length);
-            const groupedData = groupExpenseByDate(filteredExpenses);
-            setAllGroupedExpenses(groupedData);
-          }
-        });
-        setloaderK(false);
-      } catch (error) {
-        console.log('USER IS NOT LOGGED IN', error);
-        navigate('/auth');
-      }
-    };
-
-    fetchUser();
-  }, [dispatch, navigate, userId, allGroupedExpenses]);
-  // all categories are refreshing themselves continously
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -96,14 +64,48 @@ function Expense() {
     }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     try {
-      expenseService.deleteExpense(id);
+      await expenseService.deleteExpense(id);
       console.log('EXPENSE DELETED SUCCESSFULLY');
     } catch (error) {
       console.log('ERROR ON DELETEING EXPENSE ON FRONT-END', error);
     }
   };
+
+  const fetchUser = useCallback(async () => {
+    try {
+      const userData = await authservice.getCurrentAccount();
+      if (userData) {
+        dispatch(login(userData));
+        setUserId(userData.$id);
+        console.log('USER LOGGED IN SUCCESSFULLY');
+      }
+
+      const expenseData = await expenseService.getAllExpenses([]);
+      const filteredExpenses = expenseData.documents.filter(
+        (exp) => exp.userId === userId
+      );
+      setLength(filteredExpenses.length);
+      const groupedData = groupExpenseByDate(filteredExpenses);
+
+      if (groupedData) {
+        setAllGroupedExpenses(groupedData);
+      } else {
+        setAllGroupedExpenses({});
+      }
+
+      setLoaderK(false);
+    } catch (error) {
+      console.log('ERROR:', error);
+      setLoaderK(false);
+      navigate('/auth');
+    }
+  }, [dispatch, navigate, userId, handleDelete, handleSubmit]);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   return (
     <div className="lg:px-[4rem] px-5 pt-10 py-[1rem] font-poppins">
@@ -160,65 +162,73 @@ function Expense() {
       </Card>
 
       {/* all expenses section  */}
-      {length ? (
+      {loaderK ? (
+        <div className="mt-10 text-center">
+          <div className="loader mx-auto"></div>
+        </div>
+      ) : (
         <div className="mt-10">
           <h2 className="text-xl font-semibold">All Expenses ({length})</h2>
 
-          <div className="mt-10 flex flex-col gap-y-6">
-            {Object.keys(allGroupedExpenses).map((date) => (
-              <div className="flex flex-col gap-y-4" key={date}>
-                <div className="flex gap-x-3 items-center">
-                  <i className="fa-solid fa-angles-right"></i>
-                  <h2 className="text-lg font-semibold">Expenses on {date}</h2>
+          {Object.keys(allGroupedExpenses).length ? (
+            <div className="mt-10 flex flex-col gap-y-6">
+              {Object.keys(allGroupedExpenses).map((date) => (
+                <div className="flex flex-col gap-y-4" key={date}>
+                  <div className="flex gap-x-3 items-center">
+                    <i className="fa-solid fa-angles-right"></i>
+                    <h2 className="text-lg font-semibold">
+                      Expenses on {date}
+                    </h2>
+                  </div>
+                  <hr />
+                  <ul className="flex flex-col gap-y-2">
+                    {allGroupedExpenses[date].map((item) => (
+                      <Card className="flex items-center pt-6" key={item.$id}>
+                        <CardContent className="flex w-full items-center justify-between flex-col lg:flex-row gap-5 lg:gap-0">
+                          <div className="flex items-center justify-between lg:justify-start gap-8 w-full">
+                            <div className="lg:w-[30%]">{item.name}</div>
+                            <div className="flex items-center gap-1">
+                              {' '}
+                              <span>&#8377;</span>
+                              <span>{item.amount}</span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-8">
+                            <div className="flex items-center border rounded-lg">
+                              <input
+                                type="text"
+                                id="categorys"
+                                value={'Cash Outflow'}
+                                className="capitalize w-[80%] bg-transparent inline-flex p-2"
+                                readOnly="true"
+                              />
+                              <i className="fa-solid fa-arrow-trend-down text-red-500"></i>
+                            </div>
+
+                            <Button
+                              className="flex items-center gap-1 hover:bg-[#fd366e] hover:text-white"
+                              onClick={() => handleDelete(item.$id)}
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </ul>
                 </div>
-                <hr />
-                <ul className="flex flex-col gap-y-2">
-                  {allGroupedExpenses[date].map((item) => (
-                    <Card className="flex items-center pt-6" key={item.$id}>
-                      <CardContent className="flex w-full items-center justify-between flex-col lg:flex-row gap-5 lg:gap-0">
-                        <div className="flex items-center justify-between lg:justify-start gap-8 w-full">
-                          <div className="lg:w-[30%]">{item.name}</div>
-                          <div className="flex items-center gap-1">
-                            {' '}
-                            <span>&#8377;</span>
-                            <span>{item.amount}</span>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-8">
-                          <div className="flex items-center border rounded-lg">
-                            <input
-                              type="text"
-                              id="categorys"
-                              value={'Cash Outflow'}
-                              className="capitalize w-[80%] bg-transparent inline-flex p-2"
-                              readOnly="true"
-                            />
-                            <i className="fa-solid fa-arrow-trend-down text-red-500"></i>
-                          </div>
-
-                          <Button
-                            className="flex items-center gap-1 hover:bg-[#fd366e] hover:text-white"
-                            onClick={() => handleDelete(item.$id)}
-                          >
-                            <i className="fa-solid fa-trash"></i>
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : (
-        <div className="mt-10 text-center lg:min-h-screen">
-          <div className="loader mx-auto"></div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-10 flex flex-col gap-y-6">
+              No Data Available. Please Create your First Entry
+            </div>
+          )}
         </div>
       )}
     </div>
   );
-}
+};
 
 export default Expense;
