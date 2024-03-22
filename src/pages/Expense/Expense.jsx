@@ -14,6 +14,7 @@ import { login } from '@/store/authSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import expenseService from '@/appwrite/expense.config';
+import { Heading1 } from 'lucide-react';
 
 const groupExpenseByDate = (expenses) => {
   return expenses.reduce((groupedExpenses, expense) => {
@@ -35,12 +36,14 @@ function Expense() {
   const [allGroupedExpenses, setAllGroupedExpenses] = useState({});
   const [length, setLength] = useState(0);
   const [userId, setUserId] = useState('');
+  const [loaderK, setloaderK] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        setloaderK(true);
         const userData = await authservice.getCurrentAccount();
         if (userData) {
           dispatch(login(userData));
@@ -58,6 +61,7 @@ function Expense() {
             setAllGroupedExpenses(groupedData);
           }
         });
+        setloaderK(false);
       } catch (error) {
         console.log('USER IS NOT LOGGED IN', error);
         navigate('/auth');

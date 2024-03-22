@@ -23,10 +23,12 @@ function Home() {
   const [incomeSum, setIncomeSum] = useState(0);
   const [incomeTodaysSum, setIncomeTodaysSum] = useState(0);
   const [result, setResult] = useState(0);
+  const [loaderK, setLoaderK] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
+        setLoaderK(true);
         const userData = await authservice.getCurrentAccount();
         if (userData) {
           dispatch(login(userData));
@@ -84,7 +86,10 @@ function Home() {
           }
 
           setResult(incomeSum - sum);
+          console.log(result);
         });
+
+        setLoaderK(false);
       } catch (error) {
         console.log('USER IS NOT LOGGED IN', error);
         navigate('/auth');
@@ -92,7 +97,7 @@ function Home() {
     };
 
     fetchUser();
-  }, [dispatch, navigate, userId, sum, incomeSum]);
+  }, [dispatch, navigate, userId, sum, incomeSum, result]);
 
   return (
     <div className="lg:px-[4rem] px-5 pt-10 py-[1rem]">
@@ -110,14 +115,22 @@ function Home() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {sum ? (
-                <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
-                  <span>&#8377;</span>
-                  <span className="flex gap-x-2 items-center">
-                    <p className="text-lg">{sum}</p>
-                    <i className="fa-solid fa-arrow-trend-down text-red-500"></i>
-                  </span>
-                </Button>
+              {!loaderK ? (
+                <div className="">
+                  {sum ? (
+                    <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
+                      <span>&#8377;</span>
+                      <span className="flex gap-x-2 items-center">
+                        <p className="text-lg">{sum}</p>
+                        <i className="fa-solid fa-arrow-trend-down text-red-500"></i>
+                      </span>
+                    </Button>
+                  ) : (
+                    <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
+                      <span>No Entry</span>
+                    </Button>
+                  )}
+                </div>
               ) : (
                 <div className="min-h-[5vh]">
                   <div className="loader"></div>
@@ -136,14 +149,22 @@ function Home() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {todaysSum ? (
-                <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
-                  <span>&#8377;</span>
-                  <span className="flex gap-x-2 items-center">
-                    <p className="text-lg">{todaysSum}</p>
-                    <i className="fa-solid fa-arrow-trend-down text-red-500"></i>
-                  </span>
-                </Button>
+              {!loaderK ? (
+                <div className="">
+                  {todaysSum ? (
+                    <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
+                      <span>&#8377;</span>
+                      <span className="flex gap-x-2 items-center">
+                        <p className="text-lg">{todaysSum}</p>
+                        <i className="fa-solid fa-arrow-trend-down text-red-500"></i>
+                      </span>
+                    </Button>
+                  ) : (
+                    <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
+                      <span>No Entry</span>
+                    </Button>
+                  )}
+                </div>
               ) : (
                 <div className="min-h-[5vh]">
                   <div className="loader"></div>
@@ -162,14 +183,22 @@ function Home() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {incomeSum ? (
-                <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
-                  <span>&#8377;</span>
-                  <span className="flex gap-x-2 items-center">
-                    <p className="text-lg">{incomeSum}</p>
-                    <i className="fa-solid fa-arrow-trend-up text-green-500"></i>
-                  </span>
-                </Button>
+              {!loaderK ? (
+                <div className="">
+                  {incomeSum ? (
+                    <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
+                      <span>&#8377;</span>
+                      <span className="flex gap-x-2 items-center">
+                        <p className="text-lg">{incomeSum}</p>
+                        <i className="fa-solid fa-arrow-trend-up text-green-500"></i>
+                      </span>
+                    </Button>
+                  ) : (
+                    <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
+                      <span>No Entry</span>
+                    </Button>
+                  )}
+                </div>
               ) : (
                 <div className="min-h-[5vh]">
                   <div className="loader"></div>
@@ -188,14 +217,22 @@ function Home() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {incomeTodaysSum ? (
-                <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
-                  <span>&#8377;</span>
-                  <span className="flex gap-x-2 items-center">
-                    <p className="text-lg">{incomeTodaysSum}</p>
-                    <i className="fa-solid fa-arrow-trend-up text-green-500"></i>
-                  </span>
-                </Button>
+              {!loaderK ? (
+                <div className="">
+                  {incomeTodaysSum ? (
+                    <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
+                      <span>&#8377;</span>
+                      <span className="flex gap-x-2 items-center">
+                        <p className="text-lg">{incomeTodaysSum}</p>
+                        <i className="fa-solid fa-arrow-trend-up text-green-500"></i>
+                      </span>
+                    </Button>
+                  ) : (
+                    <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
+                      <span>No Entry</span>
+                    </Button>
+                  )}
+                </div>
               ) : (
                 <div className="min-h-[5vh]">
                   <div className="loader"></div>
@@ -214,18 +251,26 @@ function Home() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {result ? (
-              <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
-                <span>&#8377;</span>
-                <div className="flex items-center gap-x-2">
-                  <p className="text-lg">{result}</p>
-                  {result >= 0 ? (
-                    <i className="fa-solid fa-arrow-trend-up text-green-500"></i>
-                  ) : (
-                    <i className="fa-solid fa-arrow-trend-down text-red-500"></i>
-                  )}
-                </div>
-              </Button>
+            {!loaderK ? (
+              <div className="">
+                {result ? (
+                  <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
+                    <span>&#8377;</span>
+                    <span className="flex gap-x-2 items-center">
+                      <p className="text-lg">{result}</p>
+                      {result >= 0 ? (
+                        <i className="fa-solid fa-arrow-trend-up text-green-500"></i>
+                      ) : (
+                        <i className="fa-solid fa-arrow-trend-down text-red-500"></i>
+                      )}
+                    </span>
+                  </Button>
+                ) : (
+                  <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
+                    <span>No Entry</span>
+                  </Button>
+                )}
+              </div>
             ) : (
               <div className="min-h-[5vh]">
                 <div className="loader"></div>
