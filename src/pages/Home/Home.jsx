@@ -265,7 +265,7 @@ function Home() {
                   </Button>
                 ) : (
                   <Button className="flex hover:bg-[#fd366e] hover:text-white min-h-[5vh] items-center gap-1 text-xl">
-                    <span>No Entry</span>
+                    <span>&#8377; 0</span>
                   </Button>
                 )}
               </div>
